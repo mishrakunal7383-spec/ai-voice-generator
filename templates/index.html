@@ -5,51 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-body {
-    font-family: sans-serif;
-    background: #111;
-    color: white;
-    text-align: center;
-    padding: 20px;
-}
-
-textarea {
-    width: 100%;
-    height: 150px;
-    background: #222;
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    border: none;
-    font-size: 16px;
-}
-
-button {
-    padding: 10px;
-    margin: 6px;
-    font-size: 16px;
-    background: #00ff88;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-audio {
-    margin-top: 20px;
-    width:100%;
-}
+body { font-family: sans-serif; background: #111; color: white; text-align: center; padding: 20px; }
+textarea { width: 100%; height: 150px; background: #222; color: white; padding: 10px; border-radius: 5px; border: none; font-size: 16px; }
+button { padding: 10px 20px; margin: 6px; font-size: 16px; background: #00ff88; border: none; border-radius: 5px; cursor: pointer; }
+audio { margin-top: 20px; width:100%; }
 </style>
 </head>
 
 <body>
 
 <h1>🎙️ Aakashvaani.AI</h1>
-<p>Free Hindi Voice Generator</p>
+<p>Free Natural Hindi Voice Generator</p>
 
 <form id="voiceForm">
     <textarea id="textInput" placeholder="Yahan text likho..."></textarea>
     <br>
-    <button type="submit">Generate Voice 🔥</button>
+    <button type="submit">Generate 🔥</button>
     <button type="button" id="retryBtn" style="display:none;">Retry 🔄</button>
 </form>
 
@@ -80,7 +51,7 @@ async function generateAudio(text){
             </audio>
             <br><br>
             <a href="${data.audio}" download>
-                <button>Download MP3 ⬇</button>
+                <button>Download ⬇</button>
             </a>
         `;
     } else {
