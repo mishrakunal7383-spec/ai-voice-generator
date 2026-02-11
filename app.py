@@ -15,8 +15,8 @@ moods = [
     "Devotional", "Motivational", "Advertisement", "Excited", "Calm"
 ]
 
-# Define voices mapping for simulation
-voices = ["male", "female", "kid"]  # gTTS cannot change voice, just simulate
+# Voices for simulation
+voices = ["male", "female", "kid"]
 languages = ["hi", "en"]
 
 @app.route("/")
@@ -43,11 +43,15 @@ def tts():
     filename = "output.mp3"
     filepath = os.path.join("static", filename)
 
-    # Append voice/mood in text for simulation
+    # Add mood and voice prefix for simulation
     tts_text = f"[{mood} | {voice_type.upper()}] {text}"
 
     try:
-        tts = gTTS(text=tts_text, lang=lang)
+        # Use male Hindi voice as default
+        if lang == "hi":
+            tts = gTTS(text=tts_text, lang="hi")
+        else:
+            tts = gTTS(text=tts_text, lang="en")
         tts.save(filepath)
         return jsonify({"audio": f"/static/{filename}"})
     except Exception as e:
