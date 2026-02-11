@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Aakashvaani A.I 🎙️</title>
+<title>Aakashvaani.AI 🎙️</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
@@ -47,14 +47,14 @@ audio{
 
 <body>
 
-<h1>🎙️ Aakashvaani A.I</h1>
+<h1>🎙️ Aakashvaani.AI</h1>
 <p>Free Multi-Voice Text To Speech Generator</p>
 
-<form action="/tts" method="post">
-    <textarea name="text" placeholder="Text paste kare Gurudev..."></textarea>
+<form id="voiceForm">
+    <textarea name="text" id="textInput" placeholder="Text paste kare Gurudev..."></textarea>
     <br>
 
-    <select name="voice">
+    <select name="voice" id="voiceSelect">
         <option value="en-IN-PrabhatNeural">Hindi Male</option>
         <option value="en-IN-NeerjaNeural">Hindi Female</option>
         <option value="en-US-GuyNeural">Story Mode</option>
@@ -66,17 +66,45 @@ audio{
     <button type="submit">Generate Voice 🔥</button>
 </form>
 
-{% if audio %}
-<h3>Preview 🎧</h3>
-<audio controls>
-  <source src="{{ audio }}" type="audio/mpeg">
-</audio>
+<div id="audioContainer"></div>
 
-<br><br>
-<a href="{{ audio }}" download>
-    <button>Download MP3 ⬇</button>
-</a>
-{% endif %}
+<script>
+const form = document.getElementById('voiceForm');
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();  // page reload prevent
+
+    const text = document.getElementById('textInput').value;
+    const voice = document.getElementById('voiceSelect').value;
+
+    const formData = new FormData();
+    formData.append('text', text);
+    formData.append('voice', voice);
+
+    const res = await fetch('/tts', {
+        method: 'POST',
+        body: formData
+    });
+
+    const data = await res.json();
+
+    if(data.audio){
+        const audioContainer = document.getElementById('audioContainer');
+        audioContainer.innerHTML = `
+            <h3>Preview 🎧</h3>
+            <audio controls autoplay>
+                <source src="${data.audio}" type="audio/mpeg">
+            </audio>
+            <br><br>
+            <a href="${data.audio}" download>
+                <button>Download MP3 ⬇</button>
+            </a>
+        `;
+    } else {
+        alert("Audio generate nahi hua Gurudev 😅");
+    }
+});
+</script>
 
 </body>
 </html>
