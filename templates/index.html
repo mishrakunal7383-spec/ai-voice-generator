@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Aakashvaani A.I 🎙️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body{
+font-family:sans-serif;
+background:#111;
+color:white;
+text-align:center;
+padding:20px;
+}
+
+textarea{
+width:100%;
+height:160px;
+margin:10px 0;
+}
+
+select,button{
+padding:10px;
+margin:6px;
+}
+
+button{
+background:#00ff88;
+border:none;
+font-size:16px;
+}
+
+audio{
+margin-top:20px;
+width:100%;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🎙️ Aakashvaani A.I</h1>
+<p>Free Multi-Voice Text To Speech Generator</p>
+
+<form action="/tts" method="post">
+
+<textarea name="text" placeholder="Text paste kare Gurudev..."></textarea>
+
+<br>
+
+<select name="voice">
+<option value="en-IN-PrabhatNeural">Hindi Male</option>
+<option value="en-IN-NeerjaNeural">Hindi Female</option>
+<option value="en-US-GuyNeural">Story Mode</option>
+<option value="en-US-JennyNeural">Friendly Voice</option>
+<option value="en-GB-RyanNeural">News Anchor</option>
+</select>
+
+<br>
+
+<button type="submit">Generate Voice 🔥</button>
+
+</form>
+
+{% if audio %}
+<h3>Preview 🎧</h3>
+
+<audio controls>
+  <source src="{{ audio }}" type="audio/mpeg">
+</audio>
+
+<br><br>
+
+<a href="{{ audio }}" download>
+<button>Download MP3 ⬇</button>
+</a>
+
+{% endif %}
+
+</body>
+  </html>
