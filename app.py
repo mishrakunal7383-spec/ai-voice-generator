@@ -23,6 +23,7 @@ def tts():
     filepath = os.path.join("static", filename)
 
     try:
+        # Natural Hindi female voice
         tts = gTTS(text=text, lang="hi")
         tts.save(filepath)
         return jsonify({"audio": f"/static/{filename}"})
