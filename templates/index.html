@@ -13,7 +13,7 @@ body {
     padding: 20px;
 }
 
-textarea{
+textarea {
     width: 100%;
     height: 150px;
     background: #222;
@@ -24,20 +24,20 @@ textarea{
     font-size: 16px;
 }
 
-select, button{
+select, button {
     padding: 10px;
     margin: 6px;
     font-size: 16px;
 }
 
-button{
+button {
     background: #00ff88;
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
 
-audio{
+audio {
     margin-top: 20px;
     width:100%;
 }
@@ -47,7 +47,7 @@ audio{
 <body>
 
 <h1>🎙️ Aakashvaani.AI</h1>
-<p>Free Text to Speech Converter</p>
+<p>Free Hindi/English Voice Generator | Male/Female/Kid | 15 Moods</p>
 
 <form id="voiceForm">
     <textarea id="textInput" placeholder="Yahan text likho..."></textarea>
@@ -56,6 +56,30 @@ audio{
     <select id="languageSelect">
         <option value="hi">Hindi</option>
         <option value="en">English</option>
+    </select>
+
+    <select id="voiceSelect">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="kid">Kid</option>
+    </select>
+
+    <select id="moodSelect">
+        <option>News Anchor</option>
+        <option>Story Teller</option>
+        <option>Cartoon</option>
+        <option>Teacher</option>
+        <option>Crime Reporter</option>
+        <option>Sant</option>
+        <option>Funny Kid</option>
+        <option>Aggressive</option>
+        <option>Professional Anchor</option>
+        <option>Friendly Anchor</option>
+        <option>Devotional</option>
+        <option>Motivational</option>
+        <option>Advertisement</option>
+        <option>Excited</option>
+        <option>Calm</option>
     </select>
 
     <br>
@@ -68,26 +92,29 @@ audio{
 <script>
 let previousText = "";
 let previousLang = "";
+let previousVoice = "";
+let previousMood = "";
 
 const form = document.getElementById("voiceForm");
 const retryBtn = document.getElementById("retryBtn");
 
-async function generateAudio(text, lang) {
+async function generateAudio(text, lang, voice, mood){
     previousText = text;
     previousLang = lang;
+    previousVoice = voice;
+    previousMood = mood;
     retryBtn.style.display = "block";
 
     const formData = new FormData();
     formData.append("text", text);
     formData.append("language", lang);
+    formData.append("voice", voice);
+    formData.append("mood", mood);
 
-    const res = await fetch("/tts", {
-        method: "POST",
-        body: formData
-    });
+    const res = await fetch("/tts", {method: "POST", body: formData});
     const data = await res.json();
 
-    if (data.audio) {
+    if(data.audio){
         const container = document.getElementById("audioContainer");
         container.innerHTML = `
             <h3>Preview 🎧</h3>
@@ -104,21 +131,25 @@ async function generateAudio(text, lang) {
     }
 }
 
-form.addEventListener("submit", (e) => {
+form.addEventListener("submit", (e)=>{
     e.preventDefault();
     const text = document.getElementById("textInput").value;
     const lang = document.getElementById("languageSelect").value;
-    generateAudio(text, lang);
+    const voice = document.getElementById("voiceSelect").value;
+    const mood = document.getElementById("moodSelect").value;
+    generateAudio(text, lang, voice, mood);
 });
 
-retryBtn.addEventListener("click", () => {
-    if (previousText && previousLang) {
+retryBtn.addEventListener("click", ()=>{
+    if(previousText){
         document.getElementById("textInput").value = previousText;
         document.getElementById("languageSelect").value = previousLang;
-        generateAudio(previousText, previousLang);
+        document.getElementById("voiceSelect").value = previousVoice;
+        document.getElementById("moodSelect").value = previousMood;
+        generateAudio(previousText, previousLang, previousVoice, previousMood);
     }
 });
 </script>
 
 </body>
-</html>
+    </html>
