@@ -72,7 +72,7 @@ audio{
 const form = document.getElementById('voiceForm');
 
 form.addEventListener('submit', async (e) => {
-    e.preventDefault();  // page reload prevent
+    e.preventDefault();  // prevent page reload
 
     const text = document.getElementById('textInput').value;
     const voice = document.getElementById('voiceSelect').value;
