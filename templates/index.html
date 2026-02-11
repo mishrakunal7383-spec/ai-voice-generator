@@ -100,11 +100,11 @@ form.addEventListener('submit', async (e) => {
                 <button>Download MP3 ⬇</button>
             </a>
         `;
-    } else {
-        alert("Audio generate nahi hua Gurudev 😅");
+    } else if(data.error){
+        alert("Error: " + data.error);
     }
 });
 </script>
 
 </body>
-</html>
+    </html>
