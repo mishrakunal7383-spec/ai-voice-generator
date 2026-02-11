@@ -44,29 +44,11 @@ audio{
 <body>
 
 <h1>🎙️ Aakashvaani.AI</h1>
-<p>Multi-Language & Multi-Mood Text To Speech Generator</p>
+<p>Hindi Multi-Mood Voice Generator</p>
 
 <form id="voiceForm">
-    <textarea name="text" id="textInput" placeholder="Text paste kare Gurudev..."></textarea>
+    <textarea name="text" id="textInput" placeholder="Text yahan likho..."></textarea>
     <br>
-
-    <select id="languageSelect">
-        <option value="hi-IN">Hindi</option>
-        <option value="gu-IN">Gujarati</option>
-        <option value="bn-IN">Bengali</option>
-        <option value="mr-IN">Marathi</option>
-        <option value="pa-IN">Punjabi</option>
-        <option value="ta-IN">Tamil</option>
-        <option value="te-IN">Telugu</option>
-        <option value="kn-IN">Kannada</option>
-        <option value="ml-IN">Malayalam</option>
-        <option value="or-IN">Odia</option>
-        <option value="as-IN">Assamese</option>
-        <option value="en-IN">English</option>
-        <option value="ur-IN">Urdu</option>
-        <option value="sa-IN">Sanskrit</option>
-        <option value="bh-IN">Bhojpuri</option>
-    </select>
 
     <select id="moodSelect">
         <option value="News Anchor">News Anchor</option>
@@ -100,16 +82,14 @@ audio{
 
 <script>
 let previousText = "";
-let previousLanguage = "";
 let previousMood = "";
 let previousGender = "";
 
 const form = document.getElementById('voiceForm');
 const retryBtn = document.getElementById('retryBtn');
 
-async function generateAudio(text, language, mood, gender){
+async function generateAudio(text, mood, gender){
     previousText = text;
-    previousLanguage = language;
     previousMood = mood;
     previousGender = gender;
 
@@ -117,15 +97,10 @@ async function generateAudio(text, language, mood, gender){
 
     const formData = new FormData();
     formData.append('text', text);
-    formData.append('language', language);
     formData.append('mood', mood);
     formData.append('gender', gender);
 
-    const res = await fetch('/tts', {
-        method: 'POST',
-        body: formData
-    });
-
+    const res = await fetch('/tts', {method:'POST', body:formData});
     const data = await res.json();
 
     if(data.audio){
@@ -140,28 +115,25 @@ async function generateAudio(text, language, mood, gender){
                 <button>Download MP3 ⬇</button>
             </a>
         `;
-    } else if(data.error){
+    } else {
         alert("Error: " + data.error);
     }
 }
 
-form.addEventListener('submit', async (e) => {
+form.addEventListener('submit', async (e)=>{
     e.preventDefault();
     const text = document.getElementById('textInput').value;
-    const language = document.getElementById('languageSelect').value;
     const mood = document.getElementById('moodSelect').value;
     const gender = document.getElementById('genderSelect').value;
-
-    generateAudio(text, language, mood, gender);
+    generateAudio(text, mood, gender);
 });
 
-retryBtn.addEventListener('click', () => {
-    if(previousText && previousLanguage && previousMood && previousGender){
+retryBtn.addEventListener('click', ()=>{
+    if(previousText && previousMood && previousGender){
         document.getElementById('textInput').value = previousText;
-        document.getElementById('languageSelect').value = previousLanguage;
         document.getElementById('moodSelect').value = previousMood;
         document.getElementById('genderSelect').value = previousGender;
-        generateAudio(previousText, previousLanguage, previousMood, previousGender);
+        generateAudio(previousText, previousMood, previousGender);
     }
 });
 </script>
