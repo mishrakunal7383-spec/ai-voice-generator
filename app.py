@@ -1,4 +1,4 @@
-from flask import Flask, request, send_file, render_template
+from flask import Flask, request, jsonify
 import edge_tts
 import asyncio
 import os
@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 
 async def generate_voice(text, voice):
-    filename = "output.mp3"
+    filename = "static/output.mp3"  # static folder me save
     communicate = edge_tts.Communicate(text, voice)
     await communicate.save(filename)
     return filename
@@ -19,14 +19,9 @@ def home():
 def tts():
     text = request.form["text"]
     voice = request.form["voice"]
-    filename = asyncio.run(generate_voice(text, voice))
-    
-    if os.path.exists(filename):
-        audio_path = filename
-    else:
-        audio_path = None
 
-    return render_template("index.html", audio=audio_path)
+    # Generate audio
+    asyncio.run(generate_voice(text, voice))
 
-if __name__ == "__main__":
-    app.run()
+    # Return path JSON me
+    return jsonify({"audio": "static/output.mp3"})
