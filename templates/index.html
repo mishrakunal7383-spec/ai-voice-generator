@@ -12,7 +12,6 @@ body{
     text-align:center;
     padding:20px;
 }
-
 textarea{
     width:100%;
     height:160px;
@@ -24,20 +23,17 @@ textarea{
     border:none;
     font-size:16px;
 }
-
 select, button{
     padding:10px;
     margin:6px;
     font-size:16px;
 }
-
 button{
     background:#00ff88;
     border:none;
     cursor:pointer;
     border-radius:5px;
 }
-
 audio{
     margin-top:20px;
     width:100%;
@@ -48,38 +44,82 @@ audio{
 <body>
 
 <h1>🎙️ Aakashvaani.AI</h1>
-<p>Free Multi-Voice Text To Speech Generator</p>
+<p>Multi-Language & Multi-Mood Text To Speech Generator</p>
 
 <form id="voiceForm">
     <textarea name="text" id="textInput" placeholder="Text paste kare Gurudev..."></textarea>
     <br>
 
-    <select name="voice" id="voiceSelect">
-        <option value="en-IN-PrabhatNeural">Hindi Male</option>
-        <option value="en-IN-NeerjaNeural">Hindi Female</option>
-        <option value="en-US-GuyNeural">Story Mode</option>
-        <option value="en-US-JennyNeural">Friendly Voice</option>
-        <option value="en-GB-RyanNeural">News Anchor</option>
+    <select id="languageSelect">
+        <option value="hi-IN">Hindi</option>
+        <option value="gu-IN">Gujarati</option>
+        <option value="bn-IN">Bengali</option>
+        <option value="mr-IN">Marathi</option>
+        <option value="pa-IN">Punjabi</option>
+        <option value="ta-IN">Tamil</option>
+        <option value="te-IN">Telugu</option>
+        <option value="kn-IN">Kannada</option>
+        <option value="ml-IN">Malayalam</option>
+        <option value="or-IN">Odia</option>
+        <option value="as-IN">Assamese</option>
+        <option value="en-IN">English</option>
+        <option value="ur-IN">Urdu</option>
+        <option value="sa-IN">Sanskrit</option>
+        <option value="bh-IN">Bhojpuri</option>
+    </select>
+
+    <select id="moodSelect">
+        <option value="News Anchor">News Anchor</option>
+        <option value="Story Teller">Story Teller</option>
+        <option value="Cartoon">Cartoon</option>
+        <option value="Teacher">Teacher</option>
+        <option value="Crime Reporter">Crime Reporter</option>
+        <option value="Sant">Sant</option>
+        <option value="Funny Kid">Funny Kid</option>
+        <option value="Aggressive">Aggressive</option>
+        <option value="Professional Anchor">Professional Anchor</option>
+        <option value="Friendly Anchor">Friendly Anchor</option>
+        <option value="Devotional">Devotional</option>
+        <option value="Motivational">Motivational</option>
+        <option value="Advertisement">Advertisement</option>
+        <option value="Excited">Excited</option>
+        <option value="Calm">Calm</option>
+    </select>
+
+    <select id="genderSelect">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
     </select>
 
     <br>
     <button type="submit">Generate Voice 🔥</button>
+    <button type="button" id="retryBtn" style="display:none;">Retry 🔄</button>
 </form>
 
 <div id="audioContainer"></div>
 
 <script>
+let previousText = "";
+let previousLanguage = "";
+let previousMood = "";
+let previousGender = "";
+
 const form = document.getElementById('voiceForm');
+const retryBtn = document.getElementById('retryBtn');
 
-form.addEventListener('submit', async (e) => {
-    e.preventDefault();  // prevent page reload
+async function generateAudio(text, language, mood, gender){
+    previousText = text;
+    previousLanguage = language;
+    previousMood = mood;
+    previousGender = gender;
 
-    const text = document.getElementById('textInput').value;
-    const voice = document.getElementById('voiceSelect').value;
+    retryBtn.style.display = "block";
 
     const formData = new FormData();
     formData.append('text', text);
-    formData.append('voice', voice);
+    formData.append('language', language);
+    formData.append('mood', mood);
+    formData.append('gender', gender);
 
     const res = await fetch('/tts', {
         method: 'POST',
@@ -102,6 +142,26 @@ form.addEventListener('submit', async (e) => {
         `;
     } else if(data.error){
         alert("Error: " + data.error);
+    }
+}
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const text = document.getElementById('textInput').value;
+    const language = document.getElementById('languageSelect').value;
+    const mood = document.getElementById('moodSelect').value;
+    const gender = document.getElementById('genderSelect').value;
+
+    generateAudio(text, language, mood, gender);
+});
+
+retryBtn.addEventListener('click', () => {
+    if(previousText && previousLanguage && previousMood && previousGender){
+        document.getElementById('textInput').value = previousText;
+        document.getElementById('languageSelect').value = previousLanguage;
+        document.getElementById('moodSelect').value = previousMood;
+        document.getElementById('genderSelect').value = previousGender;
+        generateAudio(previousText, previousLanguage, previousMood, previousGender);
     }
 });
 </script>
